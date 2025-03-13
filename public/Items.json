@@ -1,0 +1,48 @@
+{
+  "Items": [
+    {
+      "Id": 0,
+      "Title": "Submit Documents",
+      "Description": "Review the list of documents required for submission and ensure all necessary documents are ready. Organize the documents accordingly and scan them if physical copies need to be submitted digitally. Rename the scanned files appropriately for easy identification and verify the accepted file formats. Upload the documents securely to the designated platform, double-check for accuracy, and obtain confirmation of successful submission. Follow up if necessary to ensure proper processing.",
+      "Priority": "Extreme",
+      "Status": "Not Started",
+      "ImageURL": "Submit.jpeg",
+      "Date": "3/11/2025",
+      "AdditionalNotes": "Ensure that the documents are authentic and up-to-date. Maintain confidentiality and security of sensitive information during the submission process. If there are specific guidelines or deadlines for submission, adhere to them diligently.",
+      "Deadline": "17/11/2025"
+    },
+    {
+      "Id": 1,
+      "Title": "Complete Project Report",
+      "Description": "Finalize the project report, ensuring all sections are complete and formatted correctly. Review grammar, citations, and coherence before submission.",
+      "Priority": "High",
+      "Status": "In Progress",
+      "ImageURL": "report.jpeg",
+      "Date": "10/03/2025",
+      "AdditionalNotes": "Verify references and ensure compliance with formatting guidelines.",
+      "Deadline": "20/03/2025"
+    },
+    {
+      "Id": 2,
+      "Title": "Schedule Team Meeting",
+      "Description": "Coordinate with team members to find a suitable time for a meeting. Set the agenda and prepare discussion points.",
+      "Priority": "Medium",
+      "Status": "Completed",
+      "ImageURL": "Test.webp",
+      "Date": "05/02/2025",
+      "AdditionalNotes": "Ensure availability of all key participants.",
+      "Deadline": "07/02/2025"
+    },
+    {
+      "Id": 3,
+      "Title": "Update Software Version",
+      "Description": "Check for the latest software updates and apply necessary patches. Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Check for the latest software updates and apply necessary patches.Test the system post-update to ensure stability.",
+      "Priority": "Extreme",
+      "Status": "Not Started",
+      "ImageURL": "images (3).jpeg",  
+      "Date": "01/03/2025",
+      "AdditionalNotes": "Perform a backup before updating.",
+      "Deadline": "10/03/2025"
+    }
+  ]
+}

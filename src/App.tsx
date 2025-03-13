@@ -1,24 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Menu } from './Components/Menu';
+import { Route, Routes } from 'react-router';
+import Dashboard from './Components/Routes/Dashboard';
+import OpenTasks from './Components/Routes/OpenTasks';
+import AllTasks from './Components/Routes/AllTasks';
+import Settings from './Components/Routes/Settings';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Menu/>
+      <Routes>
+        <Route path='/' element={<Dashboard/>}/>
+        <Route path='/OpenTasks' element={<OpenTasks/>}/>
+        <Route path='/AllTasks' element={<AllTasks/>}/>
+        <Route path='/Settings' element={<Settings/>}/>
+      </Routes>
     </div>
   );
 }
