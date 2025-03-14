@@ -1,3 +1,13 @@
+:root {
+  --green: #05a301;
+  --blue: #0225ff;
+  --red: #f21e1e;
+  --lightred:#FF6767;
+  --lightgrey: #a1a3ab;
+  --black: #000000;
+  --darkGrey: #747474;
+}
+
 .Dashboard {
   display: flex;
   flex-direction: column;
@@ -10,11 +20,6 @@
   font-weight: bold;
   padding-top: 1.2rem;
   font-family: "Inter", sans-serif;
-}
-.Dashboard .Container {
-  height: 100%;
-  width: 100%;
-  background-color: red;
 }
 
 .AllTasksContainer {
@@ -32,9 +37,9 @@
   height: 90%;
   width: 40%;
   border-radius: 16px;
-  border: 1px solid #a1a3ab;
+  border: 1px solid var(--lightgrey);
   text-align: start;
-  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 3px 3px 3px rgba(var(--black), 0.2);
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -45,11 +50,11 @@
   border-radius: 22px;
 }
 .AllTasksContainer .Card ::-webkit-scrollbar-thumb {
-  background-color: #a1a3ab;
+  background-color: var(--lightgrey);
   border-radius: 22px;
 }
 .AllTasksContainer .Card ::-webkit-scrollbar-thumb:hover {
-  background-color: #747474;
+  background-color: var(--darkGrey);
 }
 .AllTasksContainer .Card .ItemContainer {
   display: flex;
@@ -71,7 +76,7 @@
   position: absolute;
   bottom: -8%;
   width: 3rem;
-  border-bottom: 2px #f24e1e solid;
+  border-bottom: 2px var(--lightred) solid;
   transition: 0.5s;
 }
 .AllTasksContainer .Card:hover h2::before {
@@ -84,7 +89,7 @@
 .AllTasksContainer .Card p {
   font-size: 1rem;
   font-weight: normal;
-  color: #747474;
+  color: var(--darkGrey);
 }
 .AllTasksContainer .Card .Pretext {
   padding: 0.6rem 1.4rem;
@@ -107,10 +112,36 @@
 .AllTasksContainer .Card .Date {
   font-weight: 500;
   font-size: 0.8rem;
-  color: #a1a3ab;
+  color: var(--grey);
 }
 .AllTasksContainer .Card .Selected {
   background-color: rgba(161, 163, 171, 0.2);
+  cursor: pointer;
+}
+.AllTasksContainer .Card .TrashIcon {
+  color: black;
+  background-color: var(--lightred);
+  padding: 0.4rem;
+  border-radius: 8px;
+  stroke-width: 1.5px;
+  transition: 0.2s;
+}
+.AllTasksContainer .Card .TrashIcon:hover {
+  padding: 0.3rem;
+  size: 2.5rem;
+  cursor: pointer;
+}
+.AllTasksContainer .Card .EditIcon {
+  color: black;
+  background-color: var(--lightred);
+  padding: 0.4rem;
+  border-radius: 8px;
+  stroke-width: 1.5px;
+  transition: 0.2s;
+}
+.AllTasksContainer .Card .EditIcon:hover {
+  padding: 0.3rem;
+  size: 2.5rem;
   cursor: pointer;
 }
 .AllTasksContainer .Card .Item {
@@ -118,7 +149,7 @@
   flex-direction: row;
   margin: 1rem 3rem;
   width: 80%;
-  border: 1px solid #a1a3ab;
+  border: 1px solid var(--lightgrey);
   border-radius: 14px;
   transition: all 0.4s;
 }
@@ -169,25 +200,29 @@
 }
 
 #Red {
-  color: #F21E1E;
+  color: var(--red);
 }
 
 #Blue {
-  color: skyblue;
+  color: var(--blue);
+}
+
+#Selected {
+  background-color: #a1a3ab;
 }
 
 #Green {
-  color: greenyellow;
+  color: var(--green);
 }
 
 #RedIcon {
-  border: #F21E1E 2px solid;
+  border: var(--red) 2px solid;
 }
 
 #BlueIcon {
-  border: blue 3px solid;
+  border: var(--blue) 2px solid;
 }
 
 #GreenIcon {
-  border: greenyellow 2px solid;
+  border: var(--green) 2px solid;
 }/*# sourceMappingURL=Dashboard.css.map */

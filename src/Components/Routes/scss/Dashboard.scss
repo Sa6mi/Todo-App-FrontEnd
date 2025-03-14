@@ -1,3 +1,12 @@
+:root {
+  --green: #05a301;
+  --blue: #0225ff;
+  --red: #f21e1e;
+  --lightred:#FF6767;
+  --lightgrey: #a1a3ab;
+  --black: #000000;
+  --darkGrey: #747474;
+}
 .Dashboard {
   display: flex;
   flex-direction: column;
@@ -10,11 +19,6 @@
     padding-top: 1.2rem;
     font-family: "Inter", sans-serif;
   }
-  .Container {
-    height: 100%;
-    width: 100%;
-    background-color: red;
-  }
 }
 .AllTasksContainer {
   height: 100%;
@@ -25,36 +29,35 @@
   gap: 4rem;
   justify-content: center;
   align-items: center;
-  font-family: 'Inter',sans-serif;
+  font-family: "Inter", sans-serif;
   .Card {
     height: 90%;
     width: 40%;
     border-radius: 16px;
-    border: 1px solid #a1a3ab;
+    border: 1px solid var(--lightgrey);
     text-align: start;
-    box-shadow: 3px 3px 3px rgba($color: #000000, $alpha: 0.2);
+    box-shadow: 3px 3px 3px rgba($color: var(--black), $alpha: 0.2);
     overflow: auto;
     display: flex;
     flex-direction: column;
-    ::-webkit-scrollbar{
+    ::-webkit-scrollbar {
       width: 8px;
       background-color: transparent;
       border-radius: 22px;
     }
-    ::-webkit-scrollbar-thumb{
-      background-color: #a1a3ab;
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--lightgrey);
       border-radius: 22px;
-      &:hover{
-      background-color: #747474;
+      &:hover {
+        background-color: var(--darkGrey);
       }
     }
-  .ItemContainer{
-    display: flex;
-    margin-top: 0.4rem;
-    flex-direction: column;
-    overflow: auto;
-    
-  }
+    .ItemContainer {
+      display: flex;
+      margin-top: 0.4rem;
+      flex-direction: column;
+      overflow: auto;
+    }
 
     h2 {
       padding-left: 3rem;
@@ -67,7 +70,7 @@
         position: absolute;
         bottom: -8%;
         width: 3rem;
-        border-bottom: 2px #f24e1e solid;
+        border-bottom: 2px var(--lightred) solid;
         transition: 0.5s;
       }
     }
@@ -78,92 +81,118 @@
         }
       }
     }
-    h4{
+    h4 {
       font-size: 1rem;
       font-weight: bold;
     }
-    p{
+    p {
       font-size: 1rem;
       font-weight: normal;
-      color: #747474;
+      color: var(--darkGrey);
     }
-    .Pretext{
-      padding : 0.6rem 1.4rem;
+    .Pretext {
+      padding: 0.6rem 1.4rem;
     }
-    .Text{
+    .Text {
       padding: 0rem 1.4rem;
     }
-    .Row{
+    .Row {
       display: flex;
       flex-direction: row;
-  }
+    }
     .Column {
       display: flex;
       flex-direction: column;
     }
-    .BoldedText{
+    .BoldedText {
       font-weight: 500;
       font-size: 0.8rem;
-  }
-  .Date{
-      font-weight: 500;
-      font-size: 0.8rem;
-      color:#a1a3ab
-  }
-  .Selected{
-    background-color: rgba($color: #A1A3AB, $alpha: 0.2);
-    cursor: pointer;
-  }
-    .Item{
-        display: flex;
-        flex-direction: row;
-        margin: 1rem 3rem;
-        width: 80%;
-        border: 1px solid #a1a3ab;
-        border-radius: 14px;
-        transition: all 0.4s;
-        &:hover{
-            background-color: rgba($color: #A1A3AB, $alpha: 0.2);
-            cursor: pointer;
-        }
-    
-        .StatusIcon{
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
-            margin:1rem;
-            transition: all 0.4s;
-        }
-        .ItemDetails{
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            .Options{
-                padding-right: 1rem;
-            }
-            .ImageContainer{
-                padding: 0rem 2rem;
-                .Image{
-                    height: 6rem;
-                    width: 6rem;
-                    border-radius: 14px; 
-                    object-fit: cover;
-                }
-            }
-            .Description{
-                max-height: calc(1.25rem * 3);
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                line-clamp: 3;
-                -webkit-line-clamp: 3;
-                
-            }
-        }
     }
-    .FullImageContainer{
+    .Date {
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: var(--grey);
+    }
+    .Selected {
+      background-color: rgba($color: #a1a3ab, $alpha: 0.2);
+      cursor: pointer;
+    }
+    .TrashIcon {
+      color: black;
+      background-color: var(--lightred);
+      padding: 0.4rem;
+      border-radius: 8px;
+      stroke-width: 1.5px;
+      transition: 0.2s;
+      &:hover{
+        padding: 0.3rem;
+        size: 2.5rem;
+        cursor: pointer;
+        
+      }
+    }
+    .EditIcon {
+      color: black;
+      background-color: var(--lightred);
+      padding: 0.4rem;
+      border-radius: 8px;
+      stroke-width: 1.5px;
+      transition: 0.2s;
+      &:hover{
+        padding: 0.3rem;
+        size: 2.5rem;
+        cursor: pointer;
+      }
+    }
+    .Item {
+      display: flex;
+      flex-direction: row;
+      margin: 1rem 3rem;
+      width: 80%;
+      border: 1px solid var(--lightgrey);
+      border-radius: 14px;
+      transition: all 0.4s;
+      &:hover {
+        background-color: rgba($color: #a1a3ab, $alpha: 0.2);
+        cursor: pointer;
+      }
+
+      .StatusIcon {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        margin: 1rem;
+        transition: all 0.4s;
+      }
+      .ItemDetails {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        .Options {
+          padding-right: 1rem;
+        }
+        .ImageContainer {
+          padding: 0rem 2rem;
+          .Image {
+            height: 6rem;
+            width: 6rem;
+            border-radius: 14px;
+            object-fit: cover;
+          }
+        }
+        .Description {
+          max-height: calc(1.25rem * 3);
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          line-clamp: 3;
+          -webkit-line-clamp: 3;
+        }
+      }
+    }
+    .FullImageContainer {
       padding: 2rem 1.4rem 0.8rem 1.4rem;
-      .FullImage{
+      .FullImage {
         height: 12rem;
         width: 12rem;
         border-radius: 14px;
@@ -171,26 +200,24 @@
     }
   }
 }
-#Red{
-    color: #F21E1E;
+#Red {
+  color: var(--red);
 }
-#Blue{
-    color: skyblue;
-
+#Blue {
+  color: var(--blue);
 }
 #Selected {
-  // border: red solid 4px; 
-  background-color: rgba($color: #A1A3AB, $alpha: 1);
+  background-color: rgba($color: #a1a3ab, $alpha: 1);
 }
-#Green{
-    color: greenyellow;
+#Green {
+  color: var(--green);
 }
-#RedIcon{
-    border: #F21E1E 2px solid;
+#RedIcon {
+  border: var(--red) 2px solid;
 }
-#BlueIcon{
-    border: blue 3px solid;
+#BlueIcon {
+  border: var(--blue) 2px solid;
 }
-#GreenIcon{
-    border: greenyellow 2px solid;
+#GreenIcon {
+  border: var(--green) 2px solid;
 }

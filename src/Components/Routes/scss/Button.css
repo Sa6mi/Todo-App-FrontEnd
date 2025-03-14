@@ -1,0 +1,14 @@
+button{
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: 1px #747474 solid;
+    font-family:Montserrat;
+    font-weight:600;
+    font-size:0.8rem;
+    position: relative;
+    transition: 0.2s;
+}
+button:hover{
+   cursor: pointer;
+   transform: scale(1.04);
+}
