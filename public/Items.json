@@ -7,9 +7,9 @@
       "Priority": "Extreme",
       "Status": "Not Started",
       "ImageURL": "Submit.jpeg",
-      "Date": "3/11/2025",
+      "Date": "2025-11-03",
       "AdditionalNotes": "Ensure that the documents are authentic and up-to-date. Maintain confidentiality and security of sensitive information during the submission process. If there are specific guidelines or deadlines for submission, adhere to them diligently.",
-      "Deadline": "17/11/2025"
+      "Deadline": "2025-03-03"
     },
     {
       "Id": 1,
@@ -18,9 +18,9 @@
       "Priority": "Extreme",
       "Status": "In Progress",
       "ImageURL": "report.jpeg",
-      "Date": "10/03/2025",
+      "Date": "2025-10-03",
       "AdditionalNotes": "Verify references and ensure compliance with formatting guidelines.",
-      "Deadline": "20/03/2025"
+      "Deadline": "2025-03-20"
     },
     {
       "Id": 2,
@@ -29,9 +29,9 @@
       "Priority": "Moderate",
       "Status": "Completed",
       "ImageURL": "Test.webp",
-      "Date": "05/02/2025",
+      "Date": "2025-05-02",
       "AdditionalNotes": "Ensure availability of all key participants.",
-      "Deadline": "07/02/2025"
+      "Deadline": "2025-02-07"
     },
     {
       "Id": 3,
@@ -40,9 +40,9 @@
       "Priority": "Low",
       "Status": "Not Started",
       "ImageURL": "images (3).jpeg",  
-      "Date": "01/03/2025",
+      "Date": "2025-01-03",
       "AdditionalNotes": "Perform a backup before updating.",
-      "Deadline": "10/03/2025"
+      "Deadline": "2025-03-10"
     }
   ]
 }

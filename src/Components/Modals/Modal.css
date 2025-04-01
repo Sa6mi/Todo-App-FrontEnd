@@ -1,0 +1,119 @@
+.Modal {
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Inter";
+}
+.Modal .Container {
+  background-color: white;
+  padding: 0.4rem;
+  border-radius: 6px;
+  display: flex;
+  gap: 1.4rem;
+  flex-direction: column;
+  align-items: start;
+}
+.Modal .Container .ExitIcon {
+  cursor: pointer;
+  transition: 200ms;
+}
+.Modal .Container .ExitIcon:hover {
+  color: #ff6767;
+}
+.Modal .Container form {
+  display: flex;
+  flex-direction: row;
+  padding: 1.4rem;
+  border: #a1a3ab 1px solid;
+  border-radius: 14px;
+  gap: 1rem;
+  font-family: "Inter";
+  font-weight: 600;
+}
+.Modal .Container form .Column {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: end;
+}
+.Modal .Container form .Column .RadioGroup {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  align-items: center;
+  justify-content: start;
+  gap: 0.4rem;
+}
+.Modal .Container form .Column .RadioGroup input[type=radio] {
+  height: 1rem;
+  width: 1rem;
+}
+.Modal .Container form .Column .RadioGroup h4 {
+  padding-right: 0.8rem;
+}
+.Modal .Container form .Column .FileChooser {
+  width: 10rem;
+  height: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  border: 1px #a1a3ab solid;
+  border-radius: 6px;
+}
+.Modal .Container form .Column .FileChooser .File {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+.Modal .Container form .Column .FileChooser .FileImage {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.Modal .Container form .Column label {
+  padding: 0.6rem 0rem 0.4rem 0rem;
+}
+.Modal .Container form .Column h4 {
+  font-size: 1rem;
+}
+.Modal .Container form .Column input {
+  width: 100%;
+  height: 2rem;
+  border: 1px solid #a1a3ab;
+  padding: 0rem 0.2rem;
+  border-radius: 6px;
+  font-size: 1.1rem;
+}
+.Modal .Container form .Column textarea {
+  border: 1px solid #a1a3ab;
+  padding: 0.2rem;
+  border-radius: 6px;
+  height: 16rem;
+  width: 36rem;
+  resize: none;
+  font-size: 1.1rem;
+}
+
+#AccentRed {
+  accent-color: red;
+}
+
+#AccentBlue {
+  accent-color: blue;
+}
+
+#AccentGreen {
+  accent-color: green;
+}/*# sourceMappingURL=Modal.css.map */

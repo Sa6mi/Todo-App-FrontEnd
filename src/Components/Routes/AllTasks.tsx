@@ -2,10 +2,11 @@ import { Ellipsis, Pencil, Trash2 } from "lucide-react";
 import "./scss/Dashboard.css";
 import getTasks from "../../Services/Services";
 import { useState, useEffect } from "react";
-import DeleteModal from "../DeleteModal";
+import DeleteModal from "../Modals/DeleteModal";
+import EditModal from "../Modals/EditModal";
 type Status = "Completed" | "Not Started" | "In Progress";
-type Priority = "Extreme" | "Moderate" | "Low";
-interface Task {
+export type Priority = "Extreme" | "Moderate" | "Low";
+export interface Task {
   Id: number;
   Title: string;
   Description: string;
@@ -56,6 +57,7 @@ function AllTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task>();
   const [modal, setModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
 
   useEffect(() => {
     getTasks()
@@ -67,7 +69,8 @@ function AllTasks() {
 
   return (
     <div className="AllTasksContainer">
-    {modal && <DeleteModal closeFunction={setModal}/>}
+      {modal && <DeleteModal closeFunction={setModal} />}
+      {editModal && currentTask && <EditModal closeFunction={setEditModal} Task={currentTask} />}
       <div className="Card">
         <h2>My Tasks</h2>
         <div className="ItemContainer">
@@ -145,13 +148,13 @@ function AllTasks() {
                 className="Row"
                 style={{ gap: "1rem", paddingRight: "2rem" }}
               >
-                <Pencil className="EditIcon" size={"2.2rem"} fill="white" />
+                <Pencil className="EditIcon" size={"2.2rem"} fill="white" onClick={()=> setEditModal(true)} />
                 <Trash2
                   className="TrashIcon"
                   size={"2.2rem"}
                   fill="white"
                   color="black"
-                  onClick={()=>setModal(true)}
+                  onClick={() => setModal(true)}
                 />
               </div>
             </div>

@@ -13,6 +13,7 @@ function App() {
     <div className="App">
       <Menu/>
       <Routes>
+        <Route path='/Login' element={<Login><Login/>}></Route>
         <Route path='/' element={<Dashboard/>}/>
         <Route path='/OpenTasks' element={<OpenTasks/>}/>
         <Route path='/AllTasks' element={<AllTasks/>}/>

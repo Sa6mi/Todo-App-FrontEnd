@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import "./Modal.css";
-import Button from "./Button";
+import Button from "../Button";
 import { Dispatch, SetStateAction, useState } from "react";
 interface props{
   closeFunction:React.Dispatch<React.SetStateAction<boolean>>
