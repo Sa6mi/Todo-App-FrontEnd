@@ -4,12 +4,14 @@ interface Props extends React.PropsWithChildren {
   Text: string;
   BGcolor: string;
   TextColor: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
 }
 function Button(Props: Props) {
   return (
     <button
-      onClick={() => Props.onClick?.()}
+      disabled={Props.disabled}
+      onClick={(e) => Props.onClick?.(e)}
       style={{
         backgroundColor: `${Props.BGcolor}`,
         color: `${Props.TextColor}`,

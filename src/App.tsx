@@ -1,23 +1,58 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { Menu } from './Components/Menu';
-import { Route, Routes } from 'react-router';
-import Dashboard from './Components/Routes/Dashboard';
-import OpenTasks from './Components/Routes/OpenTasks';
-import AllTasks from './Components/Routes/AllTasks';
-import Settings from './Components/Routes/Settings';
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { Menu } from "./Components/Menu";
+import { Route, Routes } from "react-router";
+import Dashboard from "./Components/Routes/Dashboard";
+import OpenTasks from "./Components/Routes/OpenTasks";
+import AllTasks from "./Components/Routes/AllTasks";
+import Settings from "./Components/Routes/Settings";
+import { Login } from "./Components/Routes/Login";
+import { ProtectedRoute } from "./Components/Routes/Protected";
+import { useSelector } from "react-redux";
+import { RootState } from "./Store";
+import Register from "./Components/Routes/Register";
 
 function App() {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   return (
     <div className="App">
-      <Menu/>
+      {isAuthenticated && <Menu />}
       <Routes>
-        <Route path='/Login' element={<Login><Login/>}></Route>
-        <Route path='/' element={<Dashboard/>}/>
-        <Route path='/OpenTasks' element={<OpenTasks/>}/>
-        <Route path='/AllTasks' element={<AllTasks/>}/>
-        <Route path='/Settings' element={<Settings/>}/>
+        <Route path="/Login" element={<Login />}></Route>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/register" element={<Register />} />{" "}
+        <Route
+          path="/OpenTasks"
+          element={
+            <ProtectedRoute>
+              <OpenTasks />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/AllTasks"
+          element={
+            <ProtectedRoute>
+              <AllTasks />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );

@@ -1,6 +1,6 @@
 import { Ellipsis, Pencil, Trash2 } from "lucide-react";
 import "./scss/Dashboard.css";
-import getTasks from "../../Services/Services";
+import { getTasks } from "../../Services/Services";
 import { useState, useEffect } from "react";
 import DeleteModal from "../Modals/DeleteModal";
 import EditModal from "../Modals/EditModal";
@@ -70,7 +70,9 @@ function AllTasks() {
   return (
     <div className="AllTasksContainer">
       {modal && <DeleteModal closeFunction={setModal} />}
-      {editModal && currentTask && <EditModal closeFunction={setEditModal} Task={currentTask} />}
+      {editModal && currentTask && (
+        <EditModal closeFunction={setEditModal} Task={currentTask} />
+      )}
       <div className="Card">
         <h2>My Tasks</h2>
         <div className="ItemContainer">
@@ -148,7 +150,12 @@ function AllTasks() {
                 className="Row"
                 style={{ gap: "1rem", paddingRight: "2rem" }}
               >
-                <Pencil className="EditIcon" size={"2.2rem"} fill="white" onClick={()=> setEditModal(true)} />
+                <Pencil
+                  className="EditIcon"
+                  size={"2.2rem"}
+                  fill="white"
+                  onClick={() => setEditModal(true)}
+                />
                 <Trash2
                   className="TrashIcon"
                   size={"2.2rem"}

@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const getTasks = async () => {
-    const {data} = await axios.get("./Items.json");
-    return data;
-}
+export const getTasks = async () => {
+  const { data } = await axios.get("./Items.json");
+  return data;
+};
 const deleteTask = async () => {
-    return
-}
+  return;
+};
 
-export default getTasks;
+export const saveUserInLocalStorage = (user: any) => {
+    localStorage.setItem("User",JSON.stringify(user))
+};
