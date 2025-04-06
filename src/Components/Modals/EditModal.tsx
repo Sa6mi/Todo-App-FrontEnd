@@ -2,21 +2,57 @@ import { X } from "lucide-react";
 import "./Modal.css";
 import Button from "../Button";
 import { Task, Priority } from "../Routes/AllTasks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { RootState } from "../../Store";
+import { useSelector } from "react-redux";
+import { updateTask } from "../../Services/Services";
 
 interface props {
   closeFunction: React.Dispatch<React.SetStateAction<boolean>>;
   Task: Task;
-}
-function handleSubmit( editableTask: Task) {
-  console.log("Submitted");
-  console.log(editableTask);
+  onEditSuccess: (updatedTask: Task) => void;
 }
 function EditModal(props: props) {
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEditableTask({ ...editableTask, [e.target.name]: e.target.value });
   }
+  const { user } = useSelector((state: RootState) => state.auth);
   const [editableTask, setEditableTask] = useState<Task>(props.Task);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [Error, setError] = useState("");
+  const [hasChanged,setHasChanged]=useState(false);
+  function handleSubmit() {
+    setIsSubmitting(true);
+    setError("");
+    if (!user?.token) {
+      setError("Authentication Error");
+      return;
+    }
+    updateTask(editableTask.id.toString(), editableTask, user?.token)
+      .then(() => {
+        props.closeFunction(false);
+        props.onEditSuccess(editableTask);
+      })
+      .catch((err) => {
+        console.log("Error Updating Task:", err);
+        setError("Failed to Update Task");
+      })
+      .finally(() => setIsSubmitting(false));
+  }
+  const isTasksEqual= (task1: Task, task2: Task) => {
+    return (
+      task1.title === task2.title &&
+      task1.description === task2.description &&
+      task1.priority === task2.priority &&
+      task1.status === task2.status &&
+      task1.deadline === task2.deadline &&
+      task1.additional_notes===task2.additional_notes
+    );
+  };
+  useEffect(()=>{
+    const TaskChanged = !isTasksEqual(editableTask,props.Task)
+    setHasChanged(TaskChanged);
+  },[editableTask])
   return (
     <div className="Modal">
       <div className="Container" style={{ padding: "2rem" }}>
@@ -37,18 +73,18 @@ function EditModal(props: props) {
           <div className="Column">
             <label>Title</label>
             <input
-              name="Title"
+              name="title"
               type="text"
-              value={editableTask.Title}
+              value={editableTask.title}
               onChange={(e) => handleOnChange(e)}
             ></input>
             <label>DeadLine</label>
             <input
-              name="Deadline"
+              name="deadline"
               type="date"
-              value={editableTask.Deadline}
+              value={editableTask.deadline}
               onChange={(e) =>
-                setEditableTask({ ...editableTask, Deadline: e.target.value })
+                setEditableTask({ ...editableTask, deadline: e.target.value })
               }
             ></input>
             <label>Priority</label>
@@ -56,13 +92,13 @@ function EditModal(props: props) {
               <input
                 type="radio"
                 id="AccentRed"
-                name="Priority"
+                name="priority"
                 value={"Extreme"}
-                checked={editableTask.Priority === "Extreme"}
+                checked={editableTask.priority === "Extreme"}
                 onChange={(e) =>
                   setEditableTask({
                     ...editableTask,
-                    Priority: e.target.value as Priority,
+                    priority: e.target.value as Priority,
                   })
                 }
               />
@@ -71,13 +107,13 @@ function EditModal(props: props) {
               <input
                 type="radio"
                 id="AccentBlue"
-                name="Priority"
+                name="priority"
                 value={"Moderate"}
-                checked={editableTask.Priority === "Moderate"}
+                checked={editableTask.priority === "Moderate"}
                 onChange={(e) =>
                   setEditableTask({
                     ...editableTask,
-                    Priority: e.target.value as Priority,
+                    priority: e.target.value as Priority,
                   })
                 }
               />
@@ -86,13 +122,13 @@ function EditModal(props: props) {
               <input
                 type="radio"
                 id="AccentGreen"
-                name="Priority"
+                name="priority"
                 value={"Low"}
-                checked={editableTask.Priority === "Low"}
+                checked={editableTask.priority === "Low"}
                 onChange={(e) =>
                   setEditableTask({
                     ...editableTask,
-                    Priority: e.target.value as Priority,
+                    priority: e.target.value as Priority,
                   })
                 }
               />
@@ -101,11 +137,11 @@ function EditModal(props: props) {
             </div>
             <label>Description</label>
             <textarea
-              value={editableTask.Description}
+              value={editableTask.description}
               onChange={(e) =>
                 setEditableTask({
                   ...editableTask,
-                  Description: e.target.value,
+                  description: e.target.value,
                 })
               }
             ></textarea>
@@ -135,15 +171,14 @@ function EditModal(props: props) {
             BGcolor="#a1a3ab"
             TextColor="white"
             onClick={() => props.closeFunction(false)}
+            disabled={isSubmitting}
           ></Button>
           <Button
             Text="Submit"
             BGcolor="green"
             TextColor="white"
-            onClick={() => {
-              handleSubmit(editableTask);
-              props.closeFunction(false);
-            }}
+            onClick={handleSubmit}
+            disabled={isSubmitting || !hasChanged}
           ></Button>
         </div>
       </div>

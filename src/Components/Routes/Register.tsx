@@ -113,13 +113,12 @@ export const Register = () => {
         last_name: lastName,
       })
       .then((res) => {
-        setSuccess("Registration successful! Please log in."); 
+        setSuccess("Registration successful! Please log in.");
         setTimeout(() => {
-            navigate("/login", { state: { registeredEmail: email } });
-          }, 2000);
-        
+          navigate("/login", { state: { registeredEmail: email } });
+        }, 2000);
+
         navigate("/login");
-        
       })
       .catch((err) => {
         console.log("Registration Error:", err);

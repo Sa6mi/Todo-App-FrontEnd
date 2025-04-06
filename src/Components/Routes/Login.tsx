@@ -129,7 +129,7 @@ export const Login = () => {
             }}
           >
             <span style={{ fontSize: "0.8rem" }}>Don’t Have An Account?</span>
-            <span className="SignUp">Sign Up</span>
+            <span className="SignUp" onClick={()=>{navigate("/Register")}}>Sign Up</span>
           </div>
           <Button
             Text="Login"

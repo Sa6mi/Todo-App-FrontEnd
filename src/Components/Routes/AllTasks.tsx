@@ -4,18 +4,20 @@ import { getTasks } from "../../Services/Services";
 import { useState, useEffect } from "react";
 import DeleteModal from "../Modals/DeleteModal";
 import EditModal from "../Modals/EditModal";
+import { RootState } from "../../Store";
+import { useSelector } from "react-redux";
 type Status = "Completed" | "Not Started" | "In Progress";
 export type Priority = "Extreme" | "Moderate" | "Low";
 export interface Task {
-  Id: number;
-  Title: string;
-  Description: string;
-  Priority: Priority;
-  Status: Status;
-  ImageURL: string;
-  Date: string;
-  AdditionalNotes: string;
-  Deadline: string;
+  id: number;
+  title: string;
+  description: string;
+  priority: Priority;
+  status: Status;
+  image_url: string;
+  date: string;
+  additional_notes: string;
+  deadline: string;
 }
 function getStatusColor(Status: Status): string {
   switch (Status) {
@@ -53,25 +55,67 @@ function getIconColor(Priority: Priority): string {
       throw new Error("Unsupported Priority Type");
   }
 }
+function formatDate(dateString: string): string {
+  if (!dateString) return "N/A";
+  try {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  } catch (error) {
+    console.error("Invalid date format:", dateString);
+    return dateString;
+  }
+}
 function AllTasks() {
+  const { user } = useSelector((state: RootState) => state.auth);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task>();
   const [modal, setModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
 
   useEffect(() => {
-    getTasks()
-      .then((data) => setTasks(data.Items))
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    if (user?.id) {
+      getTasks(user.id, user.token)
+        .then((response) => {
+          console.log("API Response:", response);
+          setTasks(response);
+        })
+        .catch((err) => {
+          console.error("Error fetching tasks:", err);
+        });
+    }
+  }, [user]);
 
   return (
     <div className="AllTasksContainer">
-      {modal && <DeleteModal closeFunction={setModal} />}
+      {modal && currentTask && (
+        <DeleteModal
+          closeFunction={setModal}
+          Task={currentTask}
+          onDeleteSuccess={() => {
+            setTasks((prevTasks) =>
+              prevTasks.filter((task) => task.id !== currentTask.id)
+            );
+            setCurrentTask(undefined);
+          }}
+        />
+      )}
       {editModal && currentTask && (
-        <EditModal closeFunction={setEditModal} Task={currentTask} />
+        <EditModal
+          closeFunction={setEditModal}
+          Task={currentTask}
+          onEditSuccess={(updatedTask: Task) => {
+            setTasks((prevTasks) =>
+              prevTasks.map((task) =>
+                task.id === updatedTask.id ? updatedTask : task
+              )
+            );
+            setCurrentTask(updatedTask);
+          }}
+        />
       )}
       <div className="Card">
         <h2>My Tasks</h2>
@@ -80,12 +124,12 @@ function AllTasks() {
             return (
               <div
                 className={
-                  "Item" + (task.Id === currentTask?.Id ? " Selected" : "")
+                  "Item" + (task.id === currentTask?.id ? " Selected" : "")
                 }
-                key={task.Id}
+                key={task.id}
                 onClick={() => setCurrentTask(task)}
               >
-                <div className="StatusIcon" id={getIconColor(task.Priority)} />
+                <div className="StatusIcon" id={getIconColor(task.priority)} />
                 <div className="ItemDetails">
                   <div
                     className="Row"
@@ -94,7 +138,7 @@ function AllTasks() {
                       paddingTop: "0.6rem",
                     }}
                   >
-                    <h4 className="ItemTitle">{task.Title}</h4>
+                    <h4 className="ItemTitle">{task.title}</h4>
                     <div className="Options">
                       <Ellipsis />
                     </div>
@@ -103,10 +147,10 @@ function AllTasks() {
                     className="Row"
                     style={{ justifyContent: "space-around" }}
                   >
-                    <div className="Description">{task.Description}</div>
+                    <div className="Description">{task.description}</div>
                     <div className="ImageContainer">
                       <img
-                        src={`./${task.ImageURL}`}
+                        src={`./${task.image_url}`}
                         alt=""
                         className="Image"
                       />
@@ -117,18 +161,18 @@ function AllTasks() {
                       <h5 className="BoldedText">Priority:&nbsp;</h5>
                       <h5
                         className="BoldedText"
-                        id={getPriorityColor(task.Priority)}
+                        id={getPriorityColor(task.priority)}
                       >
-                        {task.Priority}
+                        {task.priority}
                       </h5>
                     </div>
                     <div className="Row" style={{ paddingBottom: "0.4rem" }}>
                       <h5 className="BoldedText">Status:&nbsp;</h5>
                       <h5
                         className="BoldedText"
-                        id={getStatusColor(task.Status)}
+                        id={getStatusColor(task.status)}
                       >
-                        {task.Status}
+                        {task.status}
                       </h5>
                     </div>
                   </div>
@@ -169,7 +213,7 @@ function AllTasks() {
               <div className="Row">
                 <div className="FullImageContainer">
                   <img
-                    src={`./${currentTask?.ImageURL}`}
+                    src={`./${currentTask?.image_url}`}
                     alt=""
                     className="FullImage"
                   />
@@ -182,34 +226,36 @@ function AllTasks() {
                     paddingTop: "2rem",
                   }}
                 >
-                  <h3 className="Title">{currentTask?.Title}</h3>
+                  <h3 className="Title">{currentTask?.title}</h3>
                   <div className="Row">
                     <h5 className="BoldedText">Priority:&nbsp;</h5>
                     <h5
                       className="BoldedText"
-                      id={getPriorityColor(currentTask.Priority)}
+                      id={getPriorityColor(currentTask.priority)}
                     >
-                      {currentTask?.Priority}
+                      {currentTask?.priority}
                     </h5>
                   </div>
                   <div className="Row">
                     <h5 className="BoldedText">Status:&nbsp;</h5>
                     <h5
                       className="BoldedText"
-                      id={getStatusColor(currentTask.Status)}
+                      id={getStatusColor(currentTask.status)}
                     >
-                      {currentTask?.Status}
+                      {currentTask?.status}
                     </h5>
                   </div>
-                  <h6 className="Date">Created on:&nbsp;20/6/2023</h6>
+                  <h6 className="Date">
+                    Created on:&nbsp;{formatDate(currentTask.date)}
+                  </h6>
                 </div>
               </div>
               <h4 className="Pretext">Task Description</h4>
-              <p className="Text">{currentTask?.Description}</p>
+              <p className="Text">{currentTask?.description}</p>
               <h4 className="Pretext">Additional Notes</h4>
-              <p className="Text">{currentTask?.AdditionalNotes} </p>
+              <p className="Text">{currentTask?.additional_notes} </p>
               <h4 className="Pretext">Deadline for Submission</h4>
-              <p className="Text">{currentTask?.Deadline} </p>
+              <p className="Text">{formatDate(currentTask?.deadline)} </p>
             </div>
           </>
         ) : (

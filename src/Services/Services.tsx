@@ -1,13 +1,41 @@
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../Store";
 
-export const getTasks = async () => {
-  const { data } = await axios.get("./Items.json");
+export const getTasks = async (id: string, token: string) => {
+  const data = axios
+    .get(`http://localhost:3001/tasks/${id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((res) => res.data);
   return data;
 };
-const deleteTask = async () => {
-  return;
+export const deleteTask = async (id: string, token: string) => {
+  const data = axios
+    .delete(`http://localhost:3001/tasks/${id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((response) => response.data);
 };
 
 export const saveUserInLocalStorage = (user: any) => {
-    localStorage.setItem("User",JSON.stringify(user))
+  localStorage.setItem("User", JSON.stringify(user));
+};
+
+export const updateTask = async (
+  taskId: string,
+  taskData: any,
+  token: string
+) => {
+  return axios
+    .put(`http://localhost:3001/tasks/${taskId}`, taskData, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((response) => response.data);
 };
