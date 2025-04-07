@@ -12,6 +12,7 @@ import { ProtectedRoute } from "./Components/Routes/Protected";
 import { useSelector } from "react-redux";
 import { RootState } from "./Store";
 import Register from "./Components/Routes/Register";
+import Snackbar from "./Components/Snackbar";
 
 function App() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -54,6 +55,7 @@ function App() {
           }
         />
       </Routes>
+      <Snackbar />
     </div>
   );
 }

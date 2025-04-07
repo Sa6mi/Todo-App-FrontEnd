@@ -4,8 +4,9 @@ import Button from "../Button";
 import { Task, Priority } from "../Routes/AllTasks";
 import { useEffect, useState } from "react";
 import { RootState } from "../../Store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateTask } from "../../Services/Services";
+import { Snackbar_Open } from "../../Store/Slices/SnackbarSlice";
 
 interface props {
   closeFunction: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,40 +20,49 @@ function EditModal(props: props) {
   const { user } = useSelector((state: RootState) => state.auth);
   const [editableTask, setEditableTask] = useState<Task>(props.Task);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [Error, setError] = useState("");
-  const [hasChanged,setHasChanged]=useState(false);
+  const [hasChanged, setHasChanged] = useState(false);
+  const dispatch = useDispatch();
   function handleSubmit() {
     setIsSubmitting(true);
-    setError("");
     if (!user?.token) {
-      setError("Authentication Error");
+      dispatch(
+        Snackbar_Open({ message: "Authentication Error", type: "error" })
+      );
       return;
     }
     updateTask(editableTask.id.toString(), editableTask, user?.token)
       .then(() => {
         props.closeFunction(false);
         props.onEditSuccess(editableTask);
+        dispatch(
+          Snackbar_Open({ message: "Updated Successfully", type: "success" })
+        );
       })
       .catch((err) => {
-        console.log("Error Updating Task:", err);
-        setError("Failed to Update Task");
+        let errormessage;
+        if (err.response.error) {
+          errormessage = err.response.error;
+        } else {
+          errormessage = "Failed to update task";
+        }
+        dispatch(Snackbar_Open({ message: errormessage, type: "error" }));
       })
       .finally(() => setIsSubmitting(false));
   }
-  const isTasksEqual= (task1: Task, task2: Task) => {
+  const isTasksEqual = (task1: Task, task2: Task) => {
     return (
       task1.title === task2.title &&
       task1.description === task2.description &&
       task1.priority === task2.priority &&
       task1.status === task2.status &&
       task1.deadline === task2.deadline &&
-      task1.additional_notes===task2.additional_notes
+      task1.additional_notes === task2.additional_notes
     );
   };
-  useEffect(()=>{
-    const TaskChanged = !isTasksEqual(editableTask,props.Task)
+  useEffect(() => {
+    const TaskChanged = !isTasksEqual(editableTask, props.Task);
     setHasChanged(TaskChanged);
-  },[editableTask])
+  }, [editableTask]);
   return (
     <div className="Modal">
       <div className="Container" style={{ padding: "2rem" }}>

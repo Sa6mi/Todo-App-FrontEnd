@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import DeleteModal from "../Modals/DeleteModal";
 import EditModal from "../Modals/EditModal";
 import { RootState } from "../../Store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Snackbar_Open } from "../../Store/Slices/SnackbarSlice";
 type Status = "Completed" | "Not Started" | "In Progress";
 export type Priority = "Extreme" | "Moderate" | "Low";
 export interface Task {
@@ -70,6 +71,7 @@ function formatDate(dateString: string): string {
   }
 }
 function AllTasks() {
+  const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task>();

@@ -4,8 +4,9 @@ import Button from "../Button";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Task } from "../Routes/AllTasks";
 import { deleteTask } from "../../Services/Services";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../Store";
+import { Snackbar_Open } from "../../Store/Slices/SnackbarSlice";
 interface props {
   closeFunction: React.Dispatch<React.SetStateAction<boolean>>;
   Task: Task;
@@ -13,13 +14,39 @@ interface props {
 }
 function DeleteModal(props: props) {
   const { user } = useSelector((state: RootState) => state.auth);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const dispatch = useDispatch();
   function handleDelete(id: string) {
-    if(user?.token){
-      deleteTask(id,user.token).then(()=>{
+    if (!user?.token) {
+      dispatch(
+        Snackbar_Open({ message: "Authentication Error", type: "error" })
+      );
+      return;
+    }
+    setIsDeleting(true);
+    deleteTask(id, user.token)
+      .then((response) => {
         props.onDeleteSuccess();
         props.closeFunction(false);
-      }).catch(err => console.log("Error Deleting Task"));
-    }
+        dispatch(
+          Snackbar_Open({
+            message: response.message || "Task deleted successfully",
+            type: "success",
+          })
+        );
+      })
+      .catch((err) => {
+        var errormessage;
+        if (err.response.error) {
+          errormessage = err.response.error;
+        } else {
+          errormessage = "Failed to delete task";
+        }
+        dispatch(Snackbar_Open({ message: errormessage, type: "error" }));
+      })
+      .finally(() => {
+        setIsDeleting(false);
+      });
   }
 
   return (
@@ -59,6 +86,7 @@ function DeleteModal(props: props) {
             BGcolor="#a1a3ab"
             TextColor="white"
             onClick={() => props.closeFunction(false)}
+            disabled={isDeleting}
           ></Button>
           <Button
             Text="Delete"
@@ -67,6 +95,7 @@ function DeleteModal(props: props) {
             onClick={() => {
               handleDelete(props.Task?.id.toString());
             }}
+            disabled={isDeleting}
           ></Button>
         </div>
       </div>

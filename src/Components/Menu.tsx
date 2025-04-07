@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Store";
 import { logout } from "../Store/Slices/AuthSlice";
+import Avatars from 'avvvatars-react'
 
 export const Menu = () => {
   const {user} = useSelector((state: RootState) => state.auth);
@@ -23,6 +24,7 @@ export const Menu = () => {
   return (
     <div className="Menu">
       <section className="User">
+        <Avatars value={((user?.firstName ?? "") + (user?.lastName ?? ""))}></Avatars>
         <img src={user?.imageUrl || "./Avatar.jpg"} className="Avatar" />
         <div className="Name">
           {user?.firstName} {user?.lastName}

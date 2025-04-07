@@ -13,13 +13,17 @@ export const getTasks = async (id: string, token: string) => {
   return data;
 };
 export const deleteTask = async (id: string, token: string) => {
-  const data = axios
+  const response = await axios
     .delete(`http://localhost:3001/tasks/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
       },
     })
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((err) => {
+      throw err;
+    });
+  return response;
 };
 
 export const saveUserInLocalStorage = (user: any) => {
@@ -37,5 +41,8 @@ export const updateTask = async (
         Authorization: "Bearer " + token,
       },
     })
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((err) => {
+      throw err;
+    });
 };

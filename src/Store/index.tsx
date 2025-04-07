@@ -1,14 +1,13 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./Slices/AuthSlice";
+import snackbarReducer from "./Slices/SnackbarSlice";
 
-const rootReducer = combineReducers({
-  
-  auth: authReducer,
-
-});
 export const store = configureStore({
 
-  reducer: rootReducer,
+  reducer: {
+    auth:authReducer,
+    snackbar:snackbarReducer
+  }
 
 });
 
