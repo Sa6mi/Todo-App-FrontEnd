@@ -6,6 +6,7 @@ interface Props extends React.PropsWithChildren {
   TextColor: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
+  width?:string;
 }
 function Button(Props: Props) {
   return (
@@ -15,6 +16,7 @@ function Button(Props: Props) {
       style={{
         backgroundColor: `${Props.BGcolor}`,
         color: `${Props.TextColor}`,
+        
       }}
     >
       {Props.Text}

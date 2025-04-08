@@ -2,21 +2,22 @@ import { X } from "lucide-react";
 import "./Modal.css";
 import Button from "../Button";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Task } from "../Routes/AllTasks";
-import { deleteTask } from "../../Services/Services";
+import { Status, Task } from "../Routes/AllTasks";
+import { deleteTask, updateTask } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../Store";
 import { Snackbar_Open } from "../../Store/Slices/SnackbarSlice";
 interface props {
   closeFunction: React.Dispatch<React.SetStateAction<boolean>>;
   Task: Task;
-  onDeleteSuccess: () => void;
+  onProgressSuccess: (Taskid: Task) => void;
+  ProgressDirection: "forward" | "backward";
 }
-function DeleteModal(props: props) {
+function ProgressModal(props: props) {
   const { user } = useSelector((state: RootState) => state.auth);
   const [isUpdateing, setIsUpdating] = useState(false);
   const dispatch = useDispatch();
-  function handleDelete(id: string) {
+  function handleSubmit() {
     if (!user?.token) {
       dispatch(
         Snackbar_Open({ message: "Authentication Error", type: "error" })
@@ -24,36 +25,55 @@ function DeleteModal(props: props) {
       return;
     }
     setIsUpdating(true);
-    deleteTask(id, user.token)
+    const newStatus =
+      props.ProgressDirection === "forward" ? nextProgress() : pastProgress();
+
+    const updatedTask = { ...props.Task, status: newStatus };
+    updateTask(props.Task.id.toString(), updatedTask, user.token)
       .then((response) => {
-        props.onDeleteSuccess();
+        props.onProgressSuccess(updatedTask);
         props.closeFunction(false);
         dispatch(
           Snackbar_Open({
-            message: "Task Progressed Successfully",
+            message: `Task ${
+              props.ProgressDirection === "forward" ? "progressed" : "reverted"
+            } successfully`,
             type: "success",
           })
         );
       })
       .catch((err) => {
-        dispatch(Snackbar_Open({ message: "Failed to progress Task", type: "error" }));
+        dispatch(
+          Snackbar_Open({
+            message: `Failed to ${
+              props.ProgressDirection === "forward" ? "progress" : "revert"
+            } task`,
+            type: "error",
+          })
+        );
       })
       .finally(() => {
         setIsUpdating(false);
       });
   }
-function nextProgress(){
-    var nextStatus = "Not Started"
-    if (props.Task.status === "Not Started"){
-        nextStatus = "In Progress"
-    } else if (props.Task.status === "In Progress"){
-        nextStatus = "Completed"
+  function nextProgress(): Status {
+    if (props.Task.status === "Not Started") {
+      return "In Progress";
+    } else if (props.Task.status === "In Progress") {
+      return "Completed";
+    } else {
+      return "Completed";
     }
-    else {
-        nextStatus = "Completed"
+  }
+  function pastProgress(): Status {
+    if (props.Task.status === "Completed") {
+      return "In Progress";
+    } else if (props.Task.status === "In Progress") {
+      return "Not Started";
+    } else {
+      return "Not Started";
     }
-    return nextStatus
-}
+  }
   return (
     <div className="Modal">
       <div className="Container">
@@ -67,12 +87,27 @@ function nextProgress(){
             padding: "1rem 1.8rem 0rem 1.8rem",
           }}
         >
-          <h3>Progress {props.Task.title} Task ?</h3>
+          <h3>
+            {props.ProgressDirection === "forward" ? "Progress" : "Revert"} Task
+            Status
+          </h3>
           <X className="ExitIcon" onClick={() => props.closeFunction(false)} />
         </div>
         <p style={{ padding: "0rem 1.8rem" }}>
-          Is Task {props.Task.title} 
-          <span style={{ color: "red", fontWeight: "bold" }}>{nextProgress()}</span>,
+          Change the status of task "{props.Task.title}" from{" "}
+          <span style={{ fontWeight: "bold" }}>{props.Task.status}</span> to{" "}
+          <span
+            style={{
+              fontWeight: "bold",
+              color:
+                props.ProgressDirection === "forward" ? "#4CAF50" : "#FF6767",
+            }}
+          >
+            {props.ProgressDirection === "forward"
+              ? nextProgress()
+              : pastProgress()}
+          </span>
+          ?
         </p>
         <div
           style={{
@@ -93,11 +128,11 @@ function nextProgress(){
             disabled={isUpdateing}
           ></Button>
           <Button
-            Text="Delete"
-            BGcolor="#f21e1e"
+            Text="Update Status"
+            BGcolor="#4CAF50"
             TextColor="white"
             onClick={() => {
-              handleDelete(props.Task?.id.toString());
+              handleSubmit();
             }}
             disabled={isUpdateing}
           ></Button>
@@ -107,4 +142,4 @@ function nextProgress(){
   );
 }
 
-export default DeleteModal;
+export default ProgressModal;

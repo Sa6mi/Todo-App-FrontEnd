@@ -1,4 +1,10 @@
-import { CirclePlus, Ellipsis, Pencil, Trash2 } from "lucide-react";
+import {
+  CirclePlus,
+  Ellipsis,
+  Pencil,
+  SquareChevronRight,
+  Trash2,
+} from "lucide-react";
 import "./scss/Dashboard.css";
 import { getTasks } from "../../Services/Services";
 import { useState, useEffect } from "react";
@@ -8,7 +14,9 @@ import { RootState } from "../../Store";
 import { useDispatch, useSelector } from "react-redux";
 import { Snackbar_Open } from "../../Store/Slices/SnackbarSlice";
 import AddModal from "../Modals/AddModal";
-type Status = "Completed" | "Not Started" | "In Progress";
+import ProgressModal from "../Modals/ProgressModal";
+import Button from "../Button";
+export type Status = "Completed" | "Not Started" | "In Progress";
 export type Priority = "Extreme" | "Moderate" | "Low";
 export interface Task {
   id: number;
@@ -79,6 +87,11 @@ function AllTasks() {
   const [modal, setModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [addModal, setAddModal] = useState(false);
+  const [progressModal, setProgressModal] = useState(false);
+  const [progressDirection, setProgressDirection] = useState<
+    "forward" | "backward"
+  >("forward");
+
   useEffect(() => {
     if (user?.id) {
       getTasks(user.id, user.token)
@@ -127,6 +140,21 @@ function AllTasks() {
             setTasks((prevTasks) => [...prevTasks, newTask]);
             setCurrentTask(newTask);
             setAddModal(false);
+          }}
+        />
+      )}
+      {progressModal && currentTask && (
+        <ProgressModal
+          Task={currentTask}
+          ProgressDirection={progressDirection}
+          closeFunction={setProgressModal}
+          onProgressSuccess={(updatedTask: Task) => {
+            setTasks((prevTasks) =>
+              prevTasks.map((task) =>
+                task.id === updatedTask.id ? updatedTask : task
+              )
+            );
+            setCurrentTask(updatedTask);
           }}
         />
       )}
@@ -284,7 +312,36 @@ function AllTasks() {
               <h4 className="Pretext">Deadline for Submission</h4>
               <p className="Text">{formatDate(currentTask?.deadline)} </p>
             </div>
-            <button style={{width:"20%"}}>sex</button>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                padding: "0.4rem 1rem 0.4rem 1rem",
+              }}
+            >
+              <Button
+                onClick={() => {
+                  setProgressDirection("backward");
+                  setProgressModal(true);
+                }}
+                disabled={currentTask.status === "Not Started"}
+                Text={"Revert Status"}
+                BGcolor={"#FF6767"}
+                TextColor={"white"}
+              ></Button>
+
+              <Button
+                onClick={() => {
+                  setProgressDirection("forward");
+                  setProgressModal(true);
+                }}
+                disabled={currentTask.status === "Completed"}
+                Text={"Progress Status"}
+                BGcolor={"#4CAF50"}
+                TextColor={"white"}
+              ></Button>
+            </div>
           </>
         ) : (
           <div
