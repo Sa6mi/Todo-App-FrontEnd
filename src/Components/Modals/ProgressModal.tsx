@@ -14,7 +14,7 @@ interface props {
 }
 function DeleteModal(props: props) {
   const { user } = useSelector((state: RootState) => state.auth);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdateing, setIsUpdating] = useState(false);
   const dispatch = useDispatch();
   function handleDelete(id: string) {
     if (!user?.token) {
@@ -23,32 +23,37 @@ function DeleteModal(props: props) {
       );
       return;
     }
-    setIsDeleting(true);
+    setIsUpdating(true);
     deleteTask(id, user.token)
       .then((response) => {
         props.onDeleteSuccess();
         props.closeFunction(false);
         dispatch(
           Snackbar_Open({
-            message: response.message || "Task deleted successfully",
+            message: "Task Progressed Successfully",
             type: "success",
           })
         );
       })
       .catch((err) => {
-        var errormessage;
-        if (err.response.error) {
-          errormessage = err.response.error;
-        } else {
-          errormessage = "Failed to delete task";
-        }
-        dispatch(Snackbar_Open({ message: errormessage, type: "error" }));
+        dispatch(Snackbar_Open({ message: "Failed to progress Task", type: "error" }));
       })
       .finally(() => {
-        setIsDeleting(false);
+        setIsUpdating(false);
       });
   }
-
+function nextProgress(){
+    var nextStatus = "Not Started"
+    if (props.Task.status === "Not Started"){
+        nextStatus = "In Progress"
+    } else if (props.Task.status === "In Progress"){
+        nextStatus = "Completed"
+    }
+    else {
+        nextStatus = "Completed"
+    }
+    return nextStatus
+}
   return (
     <div className="Modal">
       <div className="Container">
@@ -62,13 +67,12 @@ function DeleteModal(props: props) {
             padding: "1rem 1.8rem 0rem 1.8rem",
           }}
         >
-          <h3>Delete {props.Task.title} ?</h3>
+          <h3>Progress {props.Task.title} Task ?</h3>
           <X className="ExitIcon" onClick={() => props.closeFunction(false)} />
         </div>
         <p style={{ padding: "0rem 1.8rem" }}>
-          This step is{" "}
-          <span style={{ color: "red", fontWeight: "bold" }}>permenant</span>,
-          You'll lose all the task information.
+          Is Task {props.Task.title} 
+          <span style={{ color: "red", fontWeight: "bold" }}>{nextProgress()}</span>,
         </p>
         <div
           style={{
@@ -86,7 +90,7 @@ function DeleteModal(props: props) {
             BGcolor="#a1a3ab"
             TextColor="white"
             onClick={() => props.closeFunction(false)}
-            disabled={isDeleting}
+            disabled={isUpdateing}
           ></Button>
           <Button
             Text="Delete"
@@ -95,7 +99,7 @@ function DeleteModal(props: props) {
             onClick={() => {
               handleDelete(props.Task?.id.toString());
             }}
-            disabled={isDeleting}
+            disabled={isUpdateing}
           ></Button>
         </div>
       </div>

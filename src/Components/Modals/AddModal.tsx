@@ -5,23 +5,45 @@ import { Task, Priority } from "../Routes/AllTasks";
 import { useEffect, useState } from "react";
 import { RootState } from "../../Store";
 import { useDispatch, useSelector } from "react-redux";
-import { updateTask } from "../../Services/Services";
+import { createTask, updateTask } from "../../Services/Services";
 import { Snackbar_Open } from "../../Store/Slices/SnackbarSlice";
 
 interface props {
   closeFunction: React.Dispatch<React.SetStateAction<boolean>>;
-  Task: Task;
-  onEditSuccess: (updatedTask: Task) => void;
+  onAddSuccess: (newTask: Task) => void;
 }
-function EditModal(props: props) {
-  function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setEditableTask({ ...editableTask, [e.target.name]: e.target.value });
-  }
+
+function AddModal(props: props) {
   const { user } = useSelector((state: RootState) => state.auth);
-  const [editableTask, setEditableTask] = useState<Task>(props.Task);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasChanged, setHasChanged] = useState(false);
   const dispatch = useDispatch();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const initDate = () => {
+    const date = new Date();
+    return date.toISOString().split("T")[0];
+  };
+
+  const [newTask, setNewTask] = useState<Partial<Task>>({
+    title: "",
+    description: "",
+    priority: "Moderate",
+    status: "Not Started",
+    deadline: initDate(),
+    date: initDate(),
+    additional_notes: "",
+    image_url: "default.jpg",
+  });
+  const isFormValid = () => {
+    return (
+      newTask.title &&
+      newTask.title.trim() !== "" &&
+      newTask.deadline &&
+      newTask.deadline.trim() !== ""
+    );
+  };
+  function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setNewTask({ ...newTask, [e.target.name]: e.target.value });
+  }
+
   function handleSubmit() {
     setIsSubmitting(true);
     if (!user?.token) {
@@ -30,51 +52,31 @@ function EditModal(props: props) {
       );
       return;
     }
-    updateTask(editableTask.id.toString(), editableTask, user?.token)
-      .then(() => {
-        props.closeFunction(false);
-        props.onEditSuccess(editableTask);
+    createTask(newTask, user.token)
+      .then((response) => {
         dispatch(
-          Snackbar_Open({ message: "Updated Successfully", type: "success" })
+          Snackbar_Open({
+            message: "Task created successfully",
+            type: "success",
+          })
         );
+        props.onAddSuccess(response);
+        props.closeFunction(false);
       })
       .catch((err) => {
-        let errormessage;
-        if (err.response.error) {
-          errormessage = err.response.error;
-        } else {
-          errormessage = "Failed to update task";
-        }
-        dispatch(Snackbar_Open({ message: errormessage, type: "error" }));
+        let errorMessage = "Failed to create task";
+        dispatch(
+          Snackbar_Open({
+            message: errorMessage,
+            type: "error",
+          })
+        );
       })
-      .finally(() => setIsSubmitting(false));
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   }
-  const formatDateForInput = (dateString: string): string => {
-    if (!dateString) return "";
 
-    try {
-      const date = new Date(dateString);
-      return date.toISOString().split("T")[0];
-    } catch (error) {
-      console.error("Invalid date format:", dateString);
-      return "";
-    }
-  };
-
-  const isTasksEqual = (task1: Task, task2: Task) => {
-    return (
-      task1.title === task2.title &&
-      task1.description === task2.description &&
-      task1.priority === task2.priority &&
-      task1.status === task2.status &&
-      task1.deadline === task2.deadline &&
-      task1.additional_notes === task2.additional_notes
-    );
-  };
-  useEffect(() => {
-    const TaskChanged = !isTasksEqual(editableTask, props.Task);
-    setHasChanged(TaskChanged);
-  }, [editableTask]);
   return (
     <div className="Modal">
       <div className="Container" style={{ padding: "2rem" }}>
@@ -97,18 +99,17 @@ function EditModal(props: props) {
             <input
               name="title"
               type="text"
-              value={editableTask.title}
+              value={newTask.title}
               onChange={(e) => handleOnChange(e)}
             ></input>
             <label>DeadLine</label>
             <input
               name="deadline"
               type="date"
-              value={formatDateForInput(editableTask.deadline)}
-              onChange={(e) => {
-                setEditableTask({ ...editableTask, deadline: e.target.value });
-                console.log(e.target.value);
-              }}
+              value={newTask.deadline}
+              onChange={(e) =>
+                setNewTask({ ...newTask, deadline: e.target.value })
+              }
             ></input>
             <label>Priority</label>
             <div className="RadioGroup">
@@ -117,10 +118,10 @@ function EditModal(props: props) {
                 id="AccentRed"
                 name="priority"
                 value={"Extreme"}
-                checked={editableTask.priority === "Extreme"}
+                checked={newTask.priority === "Extreme"}
                 onChange={(e) =>
-                  setEditableTask({
-                    ...editableTask,
+                  setNewTask({
+                    ...newTask,
                     priority: e.target.value as Priority,
                   })
                 }
@@ -132,10 +133,10 @@ function EditModal(props: props) {
                 id="AccentBlue"
                 name="priority"
                 value={"Moderate"}
-                checked={editableTask.priority === "Moderate"}
+                checked={newTask.priority === "Moderate"}
                 onChange={(e) =>
-                  setEditableTask({
-                    ...editableTask,
+                  setNewTask({
+                    ...newTask,
                     priority: e.target.value as Priority,
                   })
                 }
@@ -147,10 +148,10 @@ function EditModal(props: props) {
                 id="AccentGreen"
                 name="priority"
                 value={"Low"}
-                checked={editableTask.priority === "Low"}
+                checked={newTask.priority === "Low"}
                 onChange={(e) =>
-                  setEditableTask({
-                    ...editableTask,
+                  setNewTask({
+                    ...newTask,
                     priority: e.target.value as Priority,
                   })
                 }
@@ -160,10 +161,10 @@ function EditModal(props: props) {
             </div>
             <label>Description</label>
             <textarea
-              value={editableTask.description}
+              value={newTask.description}
               onChange={(e) =>
-                setEditableTask({
-                  ...editableTask,
+                setNewTask({
+                  ...newTask,
                   description: e.target.value,
                 })
               }
@@ -193,7 +194,7 @@ function EditModal(props: props) {
             BGcolor="green"
             TextColor="white"
             onClick={handleSubmit}
-            disabled={isSubmitting || !hasChanged}
+            disabled={isSubmitting || !isFormValid}
           ></Button>
         </div>
       </div>
@@ -201,4 +202,4 @@ function EditModal(props: props) {
   );
 }
 
-export default EditModal;
+export default AddModal;

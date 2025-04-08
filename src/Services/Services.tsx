@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Store";
+import { Task } from "../Components/Routes/AllTasks";
 
 export const getTasks = async (id: string, token: string) => {
   const data = axios
@@ -46,3 +47,12 @@ export const updateTask = async (
       throw err;
     });
 };
+
+export const createTask = async (task:any,token:string)=>{
+ return axios.post(`http://localhost:3001/tasks`, task, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  }).then((res)=>res.data as Task).catch((err)=>{throw err})
+
+}

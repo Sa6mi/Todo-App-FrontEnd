@@ -1,4 +1,4 @@
-import { Ellipsis, Pencil, Trash2 } from "lucide-react";
+import { CirclePlus, Ellipsis, Pencil, Trash2 } from "lucide-react";
 import "./scss/Dashboard.css";
 import { getTasks } from "../../Services/Services";
 import { useState, useEffect } from "react";
@@ -7,6 +7,7 @@ import EditModal from "../Modals/EditModal";
 import { RootState } from "../../Store";
 import { useDispatch, useSelector } from "react-redux";
 import { Snackbar_Open } from "../../Store/Slices/SnackbarSlice";
+import AddModal from "../Modals/AddModal";
 type Status = "Completed" | "Not Started" | "In Progress";
 export type Priority = "Extreme" | "Moderate" | "Low";
 export interface Task {
@@ -77,7 +78,7 @@ function AllTasks() {
   const [currentTask, setCurrentTask] = useState<Task>();
   const [modal, setModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-
+  const [addModal, setAddModal] = useState(false);
   useEffect(() => {
     if (user?.id) {
       getTasks(user.id, user.token)
@@ -119,8 +120,32 @@ function AllTasks() {
           }}
         />
       )}
+      {addModal && (
+        <AddModal
+          closeFunction={setAddModal}
+          onAddSuccess={(newTask: Task) => {
+            setTasks((prevTasks) => [...prevTasks, newTask]);
+            setCurrentTask(newTask);
+            setAddModal(false);
+          }}
+        />
+      )}
+
       <div className="Card">
-        <h2>My Tasks</h2>
+        <div
+          className="Row"
+          style={{ justifyContent: "space-between", alignItems: "end" }}
+        >
+          <h2>My Tasks</h2>
+          <div style={{ paddingRight: "2rem" }}>
+            <CirclePlus
+              className="EditIcon"
+              size={"2.2rem"}
+              fill="white"
+              onClick={() => setAddModal(true)}
+            />
+          </div>
+        </div>
         <div className="ItemContainer">
           {tasks.map((task) => {
             return (
@@ -259,6 +284,7 @@ function AllTasks() {
               <h4 className="Pretext">Deadline for Submission</h4>
               <p className="Text">{formatDate(currentTask?.deadline)} </p>
             </div>
+            <button style={{width:"20%"}}>sex</button>
           </>
         ) : (
           <div

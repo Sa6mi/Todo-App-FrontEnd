@@ -10,10 +10,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Store";
 import { logout } from "../Store/Slices/AuthSlice";
-import Avatars from 'avvvatars-react'
-
+import { createAvatar } from "@dicebear/core";
+import { initials } from "@dicebear/collection";
+import { useMemo } from "react";
 export const Menu = () => {
-  const {user} = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   let navigate = useNavigate();
   let Location = useLocation();
@@ -21,11 +22,21 @@ export const Menu = () => {
     dispatch(logout());
     navigate("/");
   };
+  const seed =
+    user?.firstName && user?.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user?.email || "User";
+  const avatar = useMemo(() => {
+    return createAvatar(initials, {
+      seed: seed,
+      backgroundColor: ["FF6767"]
+    }).toDataUri();
+  }, [seed]);
+
   return (
     <div className="Menu">
       <section className="User">
-        <Avatars value={((user?.firstName ?? "") + (user?.lastName ?? ""))}></Avatars>
-        <img src={user?.imageUrl || "./Avatar.jpg"} className="Avatar" />
+        <img src={avatar} className="Avatar" />
         <div className="Name">
           {user?.firstName} {user?.lastName}
         </div>
