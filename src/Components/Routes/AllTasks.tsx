@@ -5,8 +5,7 @@ import { useState, useEffect } from "react";
 import DeleteModal from "../Modals/DeleteModal";
 import EditModal from "../Modals/EditModal";
 import { RootState } from "../../Store";
-import { useDispatch, useSelector } from "react-redux";
-import { Snackbar_Open } from "../../Store/Slices/SnackbarSlice";
+import { useSelector } from "react-redux";
 import AddModal from "../Modals/AddModal";
 import ProgressModal from "../Modals/ProgressModal";
 import Button from "../Button";
@@ -74,7 +73,6 @@ function formatDate(dateString: string): string {
   }
 }
 function AllTasks() {
-  const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task>();
@@ -352,7 +350,7 @@ function AllTasks() {
         </div>
       </div>
       <div className="Card">
-        {currentTask != undefined ? (
+        {currentTask !== undefined ? (
           <div
             style={{
               height: "100%",

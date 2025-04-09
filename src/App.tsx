@@ -4,7 +4,6 @@ import "./App.css";
 import { Menu } from "./Components/Menu";
 import { Route, Routes } from "react-router";
 import Dashboard from "./Components/Routes/Dashboard";
-import OpenTasks from "./Components/Routes/OpenTasks";
 import AllTasks from "./Components/Routes/AllTasks";
 import Settings from "./Components/Routes/Settings";
 import { Login } from "./Components/Routes/Login";
@@ -21,6 +20,7 @@ function App() {
       {isAuthenticated && <Menu />}
       <Routes>
         <Route path="/Login" element={<Login />}></Route>
+        <Route path="/register" element={<Register />} />
         <Route
           path="/"
           element={
@@ -29,20 +29,11 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/register" element={<Register />} />{" "}
-        <Route
-          path="/OpenTasks"
-          element={
-            <ProtectedRoute>
-              <OpenTasks />
-            </ProtectedRoute>
-          }
-        />  
         <Route
           path="/AllTasks"
           element={
             <ProtectedRoute>
-              <AllTasks/>
+              <AllTasks />
             </ProtectedRoute>
           }
         />

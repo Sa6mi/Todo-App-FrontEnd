@@ -29,7 +29,7 @@ export const Menu = () => {
   const avatar = useMemo(() => {
     return createAvatar(initials, {
       seed: seed,
-      backgroundColor: ["FF6767"]
+      backgroundColor: ["FF6767"],
     }).toDataUri();
   }, [seed]);
 
@@ -50,14 +50,6 @@ export const Menu = () => {
         >
           <LayoutDashboard />
           <a>Dashboard</a>
-        </li>
-        <li
-          className="MenuItem"
-          id={Location.pathname == "/OpenTasks" ? "Active" : ""}
-          onClick={() => navigate("/OpenTasks")}
-        >
-          <CircleAlert />
-          <a>Open Tasks</a>
         </li>
         <li
           className="MenuItem"
