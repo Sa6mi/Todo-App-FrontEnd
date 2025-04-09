@@ -38,6 +38,7 @@
     text-align: start;
     box-shadow: 3px 3px 3px rgba($color: var(--black), $alpha: 0.2);
     overflow: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     ::-webkit-scrollbar {
@@ -57,6 +58,8 @@
       margin-top: 0.4rem;
       flex-direction: column;
       overflow: auto;
+    overflow-x: hidden;
+    
     }
 
     h2 {

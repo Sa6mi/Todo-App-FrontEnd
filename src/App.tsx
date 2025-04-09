@@ -37,12 +37,12 @@ function App() {
               <OpenTasks />
             </ProtectedRoute>
           }
-        />
+        />  
         <Route
           path="/AllTasks"
           element={
             <ProtectedRoute>
-              <AllTasks />
+              <AllTasks/>
             </ProtectedRoute>
           }
         />

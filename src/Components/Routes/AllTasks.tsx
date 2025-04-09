@@ -1,10 +1,4 @@
-import {
-  CirclePlus,
-  Ellipsis,
-  Pencil,
-  SquareChevronRight,
-  Trash2,
-} from "lucide-react";
+import { CirclePlus, Ellipsis, Filter, Pencil, Trash2 } from "lucide-react";
 import "./scss/Dashboard.css";
 import { getTasks } from "../../Services/Services";
 import { useState, useEffect } from "react";
@@ -91,7 +85,11 @@ function AllTasks() {
   const [progressDirection, setProgressDirection] = useState<
     "forward" | "backward"
   >("forward");
-
+  const [statusFilter, setStatusFilter] = useState<Status | "">("");
+  const [priorityFilter, setPriorityFilter] = useState<Priority | "">("");
+  const [showFilters, setShowFilters] = useState(false);
+  const statusOptions: Status[] = ["Not Started", "In Progress", "Completed"];
+  const priorityOptions: Priority[] = ["Low", "Moderate", "Extreme"];
   useEffect(() => {
     if (user?.id) {
       getTasks(user.id, user.token)
@@ -104,6 +102,24 @@ function AllTasks() {
         });
     }
   }, [user]);
+
+  const clearFilters = () => {
+    setStatusFilter("");
+    setPriorityFilter("");
+  };
+  const getFilteredCount = () => {
+    const total = tasks.length;
+    const filtered = filteredTasks.length;
+    return filtered === total
+      ? `${filtered} tasks`
+      : `${filtered} of ${total} tasks`;
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    if (statusFilter && task.status !== statusFilter) return false;
+    if (priorityFilter && task.priority !== priorityFilter) return false;
+    return true;
+  });
 
   return (
     <div className="AllTasksContainer">
@@ -165,7 +181,13 @@ function AllTasks() {
           style={{ justifyContent: "space-between", alignItems: "end" }}
         >
           <h2>My Tasks</h2>
-          <div style={{ paddingRight: "2rem" }}>
+          <div style={{ paddingRight: "2rem", display: "flex", gap: "1rem" }}>
+            <Filter
+              size={"2.2rem"}
+              className="EditIcon"
+              fill="white"
+              onClick={() => setShowFilters(!showFilters)}
+            />
             <CirclePlus
               className="EditIcon"
               size={"2.2rem"}
@@ -174,150 +196,251 @@ function AllTasks() {
             />
           </div>
         </div>
-        <div className="ItemContainer">
-          {tasks.map((task) => {
-            return (
-              <div
-                className={
-                  "Item" + (task.id === currentTask?.id ? " Selected" : "")
-                }
-                key={task.id}
-                onClick={() => setCurrentTask(task)}
+        {showFilters && (
+          <div
+            className="FilterControls"
+            style={{
+              padding: "0.8rem 2rem 0.8rem 3rem",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "1rem",
+              borderBottom: "1px solid #eee",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <label style={{ paddingRight: "0.6rem", fontWeight: "500" }}>
+                Status:
+              </label>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as Status | "")}
+                style={{
+                  padding: "0.4rem",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                }}
               >
-                <div className="StatusIcon" id={getIconColor(task.priority)} />
-                <div className="ItemDetails">
+                <option value="">All Statuses</option>
+                {statusOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <label style={{ marginRight: "0.6rem", fontWeight: "500" }}>
+                Priority:
+              </label>
+              <select
+                value={priorityFilter}
+                onChange={(e) =>
+                  setPriorityFilter(e.target.value as Priority | "")
+                }
+                style={{
+                  padding: "0.4rem",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <option value="">All Priorities</option>
+                {priorityOptions.map((priority) => (
+                  <option key={priority} value={priority}>
+                    {priority}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div
+              style={{ marginLeft: "auto", fontSize: "0.9rem", color: "#666" }}
+            >
+              {getFilteredCount()}
+            </div>
+          </div>
+        )}
+
+        <div className="ItemContainer">
+          {filteredTasks.length > 0 ? (
+            filteredTasks.map((task) => {
+              return (
+                <div
+                  className={
+                    "Item" + (task.id === currentTask?.id ? " Selected" : "")
+                  }
+                  key={task.id}
+                  onClick={() => setCurrentTask(task)}
+                >
                   <div
-                    className="Row"
-                    style={{
-                      justifyContent: "space-between",
-                      paddingTop: "0.6rem",
-                    }}
-                  >
-                    <h4 className="ItemTitle">{task.title}</h4>
-                    <div className="Options">
-                      <Ellipsis />
+                    className="StatusIcon"
+                    id={getIconColor(task.priority)}
+                  />
+                  <div className="ItemDetails">
+                    <div
+                      className="Row"
+                      style={{
+                        justifyContent: "space-between",
+                        paddingTop: "0.6rem",
+                      }}
+                    >
+                      <h4 className="ItemTitle">{task.title}</h4>
+                      <div className="Options">
+                        <Ellipsis />
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    className="Row"
-                    style={{ justifyContent: "space-around" }}
-                  >
-                    <div className="Description">{task.description}</div>
-                    <div className="ImageContainer">
-                      <img
-                        src={`./${task.image_url}`}
-                        alt=""
-                        className="Image"
-                      />
+                    <div
+                      className="Row"
+                      style={{ justifyContent: "space-between" }}
+                    >
+                      <div className="Description">{task.description}</div>
+                      <div className="ImageContainer">
+                        <img
+                          src={`./${task.image_url}`}
+                          alt=""
+                          className="Image"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="Row" style={{ gap: "1rem" }}>
-                    <div className="Row">
-                      <h5 className="BoldedText">Priority:&nbsp;</h5>
-                      <h5
-                        className="BoldedText"
-                        id={getPriorityColor(task.priority)}
-                      >
-                        {task.priority}
-                      </h5>
-                    </div>
-                    <div className="Row" style={{ paddingBottom: "0.4rem" }}>
-                      <h5 className="BoldedText">Status:&nbsp;</h5>
-                      <h5
-                        className="BoldedText"
-                        id={getStatusColor(task.status)}
-                      >
-                        {task.status}
-                      </h5>
+                    <div className="Row" style={{ gap: "1rem" }}>
+                      <div className="Row">
+                        <h5 className="BoldedText">Priority:&nbsp;</h5>
+                        <h5
+                          className="BoldedText"
+                          id={getPriorityColor(task.priority)}
+                        >
+                          {task.priority}
+                        </h5>
+                      </div>
+                      <div className="Row" style={{ paddingBottom: "0.4rem" }}>
+                        <h5 className="BoldedText">Status:&nbsp;</h5>
+                        <h5
+                          className="BoldedText"
+                          id={getStatusColor(task.status)}
+                        >
+                          {task.status}
+                        </h5>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div
+              style={{
+                padding: "2rem",
+                textAlign: "center",
+                justifyContent: "center",
+                color: "#666",
+                fontStyle: "italic",
+              }}
+            >
+              No tasks found matching your filters.
+              {(statusFilter || priorityFilter) && (
+                <div style={{ marginTop: "1rem" }}>
+                  <Button
+                    Text="Clear Filters"
+                    BGcolor="#FF6767"
+                    TextColor="white"
+                    onClick={clearFilters}
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <div className="Card">
         {currentTask != undefined ? (
-          <>
-            <div
-              className="Row"
-              style={{ justifyContent: "space-between", alignItems: "end" }}
-            >
-              <h2>Details</h2>
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
               <div
                 className="Row"
-                style={{ gap: "1rem", paddingRight: "2rem" }}
+                style={{ justifyContent: "space-between", alignItems: "end" }}
               >
-                <Pencil
-                  className="EditIcon"
-                  size={"2.2rem"}
-                  fill="white"
-                  onClick={() => setEditModal(true)}
-                />
-                <Trash2
-                  className="TrashIcon"
-                  size={"2.2rem"}
-                  fill="white"
-                  color="black"
-                  onClick={() => setModal(true)}
-                />
-              </div>
-            </div>
-            <div className="ItemContainer">
-              <div className="Row">
-                <div className="FullImageContainer">
-                  <img
-                    src={`./${currentTask?.image_url}`}
-                    alt=""
-                    className="FullImage"
+                <h2>Details</h2>
+                <div
+                  className="Row"
+                  style={{ gap: "1rem", paddingRight: "2rem" }}
+                >
+                  <Pencil
+                    className="EditIcon"
+                    size={"2.2rem"}
+                    fill="white"
+                    onClick={() => setEditModal(true)}
+                  />
+                  <Trash2
+                    className="TrashIcon"
+                    size={"2.2rem"}
+                    fill="white"
+                    color="black"
+                    onClick={() => setModal(true)}
                   />
                 </div>
-                <div
-                  className="Column"
-                  style={{
-                    justifyContent: "center",
-                    gap: "1rem",
-                    paddingTop: "2rem",
-                  }}
-                >
-                  <h3 className="Title">{currentTask?.title}</h3>
-                  <div className="Row">
-                    <h5 className="BoldedText">Priority:&nbsp;</h5>
-                    <h5
-                      className="BoldedText"
-                      id={getPriorityColor(currentTask.priority)}
-                    >
-                      {currentTask?.priority}
-                    </h5>
-                  </div>
-                  <div className="Row">
-                    <h5 className="BoldedText">Status:&nbsp;</h5>
-                    <h5
-                      className="BoldedText"
-                      id={getStatusColor(currentTask.status)}
-                    >
-                      {currentTask?.status}
-                    </h5>
-                  </div>
-                  <h6 className="Date">
-                    Created on:&nbsp;{formatDate(currentTask.date)}
-                  </h6>
-                </div>
               </div>
-              <h4 className="Pretext">Task Description</h4>
-              <p className="Text">{currentTask?.description}</p>
-              <h4 className="Pretext">Additional Notes</h4>
-              <p className="Text">{currentTask?.additional_notes} </p>
-              <h4 className="Pretext">Deadline for Submission</h4>
-              <p className="Text">{formatDate(currentTask?.deadline)} </p>
+              <div className="ItemContainer">
+                <div className="Row">
+                  <div className="FullImageContainer">
+                    <img
+                      src={`./${currentTask?.image_url}`}
+                      alt=""
+                      className="FullImage"
+                    />
+                  </div>
+                  <div
+                    className="Column"
+                    style={{
+                      justifyContent: "center",
+                      gap: "1rem",
+                      paddingTop: "2rem",
+                    }}
+                  >
+                    <h3 className="Title">{currentTask?.title}</h3>
+                    <div className="Row">
+                      <h5 className="BoldedText">Priority:&nbsp;</h5>
+                      <h5
+                        className="BoldedText"
+                        id={getPriorityColor(currentTask.priority)}
+                      >
+                        {currentTask?.priority}
+                      </h5>
+                    </div>
+                    <div className="Row">
+                      <h5 className="BoldedText">Status:&nbsp;</h5>
+                      <h5
+                        className="BoldedText"
+                        id={getStatusColor(currentTask.status)}
+                      >
+                        {currentTask?.status}
+                      </h5>
+                    </div>
+                    <h6 className="Date">
+                      Created on:&nbsp;{formatDate(currentTask.date)}
+                    </h6>
+                  </div>
+                </div>
+                <h4 className="Pretext">Task Description</h4>
+                <p className="Text">{currentTask?.description}</p>
+                <h4 className="Pretext">Additional Notes</h4>
+                <p className="Text">{currentTask?.additional_notes} </p>
+                <h4 className="Pretext">Deadline for Submission</h4>
+                <p className="Text">{formatDate(currentTask?.deadline)} </p>
+              </div>
             </div>
             <div
               style={{
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
-                padding: "0.4rem 1rem 0.4rem 1rem",
+                padding: "0.4rem 1rem 1rem 1rem",
               }}
             >
               <Button
@@ -342,7 +465,7 @@ function AllTasks() {
                 TextColor={"white"}
               ></Button>
             </div>
-          </>
+          </div>
         ) : (
           <div
             style={{

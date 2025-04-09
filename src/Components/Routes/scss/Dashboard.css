@@ -41,6 +41,7 @@
   text-align: start;
   box-shadow: 3px 3px 3px rgba(var(--black), 0.2);
   overflow: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -61,6 +62,7 @@
   margin-top: 0.4rem;
   flex-direction: column;
   overflow: auto;
+  overflow-x: hidden;
 }
 .AllTasksContainer .Card h2 {
   padding-left: 3rem;

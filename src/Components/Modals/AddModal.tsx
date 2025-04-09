@@ -21,10 +21,6 @@ function AddModal(props: props) {
     const date = new Date();
     return date.toISOString().split("T")[0];
   };
-  function randomSeed ():string{
-    const random = Math.random()*5000;
-    return random.toString();
-  }
   const [newTask, setNewTask] = useState<Partial<Task>>({
     title: "",
     description: "",
@@ -33,7 +29,7 @@ function AddModal(props: props) {
     deadline: initDate(),
     date: initDate(),
     additional_notes: "",
-    image_url: randomSeed(),
+    image_url: "Submit.jpeg",
   });
   const isFormValid = () => {
     return (
