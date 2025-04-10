@@ -2,7 +2,7 @@
   --green: #05a301;
   --blue: #0225ff;
   --red: #f21e1e;
-  --lightred:#FF6767;
+  --lightred: #ff6767;
   --lightgrey: #a1a3ab;
   --black: #000000;
   --darkGrey: #747474;
@@ -38,6 +38,175 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-left: 4px solid #696969;
+}
+.Dashboard .StatCardsRow .StatCard .StatLabel {
+  font-size: 0.9rem;
+  color: #666;
+}
+.Dashboard .StatCardsRow .StatCard .StatValue {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+.Dashboard .StatCardsRow .StatCard.Urgent {
+  background-color: #fff5f5;
+  border-left: 4px solid #ff6767;
+}
+.Dashboard .StatCardsRow .StatCard.InProgress {
+  background-color: #edf9fc;
+  border-left: 4px solid #add8e6;
+}
+.Dashboard .StatCardsRow .StatCard.Completed {
+  background-color: #f5fff5;
+  border-left: 4px solid #88e788;
+}
+.Dashboard .DashboardContent {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  padding: 0 1.5rem;
+  height: 100%;
+}
+.Dashboard .DashboardContent .DashboardCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  display: flex;
+  min-width: 800px;
+  height: 100%;
+  flex-direction: column;
+}
+.Dashboard .DashboardContent .DashboardCard h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+.Dashboard .DashboardContent .DashboardCard h3::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background-color: var(--lightred);
+  transition: width 0.3s ease;
+}
+.Dashboard .DashboardContent .DashboardCard h3:hover::after {
+  width: 60px;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline {
+  position: relative;
+  padding: 2rem 0rem;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 12px;
+  width: 3px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-left: 40px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #ccc;
+  transition: all 0.3s ease;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item.Extreme::before {
+  border-color: var(--red);
+  box-shadow: 0 0 0 4px rgba(242, 30, 30, 0.1);
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item.Moderate::before {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(2, 37, 255, 0.1);
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item.Low::before {
+  border-color: var(--green);
+  box-shadow: 0 0 0 4px rgba(5, 163, 1, 0.1);
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item.overdue::before {
+  border-color: var(--lightred);
+  animation: pulse 2s infinite;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item.Extreme .timeline-content {
+  border-left-color: var(--red);
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item.Moderate .timeline-content {
+  border-left-color: var(--blue);
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item.Low .timeline-content {
+  border-left-color: var(--green);
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item.overdue .timeline-content {
+  border-left-color: var(--lightred);
+  background-color: #fff9f9;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item .timeline-content {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item .timeline-content .timeline-date {
+  color: #666;
+  font-size: 0.84rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item .timeline-content .timeline-date .overdue-label {
+  background-color: rgba(255, 103, 103, 0.1);
+  color: var(--lightred);
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item .timeline-content .timeline-title {
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item:hover {
+  transform: translateY(-2px);
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item:hover .timeline-content {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .empty-state {
+  padding: 2rem;
+  color: #666;
+  text-align: center;
+  font-style: italic;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 103, 103, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(255, 103, 103, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 103, 103, 0);
+  }
 }
 
 .AllTasksContainer {

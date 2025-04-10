@@ -16,11 +16,6 @@ import {
 function Dashboard() {
   const { user } = useSelector((state: RootState) => state.auth);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [notStartedCount, setNotStartedCount] = useState(0);
-  const [InProgressCount, setInProgressCount] = useState(0);
-  const [CompletedCount, setCompletedCount] = useState(0);
-  const [UrgentCount, setUrgentCount] = useState(0);
-
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
@@ -67,7 +62,32 @@ function Dashboard() {
       completed,
     };
   }, [tasks]);
-
+  const upcomingTasks = useMemo(() => {
+    return tasks
+      .filter((task) => task.status !== "Completed")
+      .sort((a, b) => {
+        const dateA = new Date(a.deadline);
+        const dateB = new Date(b.deadline);
+        return dateA.getTime() - dateB.getTime();
+      });
+  }, [tasks]);
+  const isOverDue = (deadline: string) => {
+    const taskDate = new Date(deadline);
+    const now = new Date();
+    taskDate.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
+    if (taskDate < now) {
+      return true;
+    }
+    return false;
+  };
+  const urgentTasks = useMemo(() => {
+    return tasks.filter(
+      (task) =>
+        task.status !== "Completed" &&
+        (task.priority === "Extreme" || isOverDue(task.deadline))
+    ).length;
+  }, [tasks]);
   return (
     <div className="Dashboard">
       <h2 className="Greeting">Welcome back, {user?.firstName} !👋</h2>
@@ -79,34 +99,63 @@ function Dashboard() {
           <div className="StatLabel">Total Tasks</div>
           <div className="StatValue">{tasks.length}</div>
         </div>
-        <div className="StatCard">
+        <div className="StatCard Urgent">
           <div className="StatIcon">
             <Clock />
           </div>
           <div className="StatLabel">Not Started</div>
           <div className="StatValue">{TasksStats.notStarted}</div>
         </div>
-        <div className="StatCard">
+        <div className="StatCard InProgress">
           <div className="StatIcon">
             <Clock />
           </div>
-          <div className="StatLabel">In Progress</div>
+          <div className="StatLabel ">In Progress</div>
           <div className="StatValue">{TasksStats.inProgress}</div>
         </div>
-        <div className="StatCard">
+        <div className="StatCard Completed">
           <div className="StatIcon">
             <CheckCircle />
           </div>
-          <div className="StatLabel">Completed</div>
+          <div className="StatLabel ">Completed</div>
           <div className="StatValue">{TasksStats.completed}</div>
         </div>
-
         <div className="StatCard Urgent">
           <div className="StatIcon">
             <AlertCircle />
           </div>
           <div className="StatLabel">Urgent</div>
           <div className="StatValue"></div>
+        </div>
+      </div>
+      <div className="DashboardContent">
+        <div className="DashboardCard">
+          <h3>Upcoming Deadlines</h3>
+          <div className="timeline">
+            {upcomingTasks.length > 0 ? (
+              upcomingTasks.map((task) => (
+                <div
+                  className={`timeline-item ${task.priority} ${
+                    isOverDue(task.deadline) ? "overdue" : ""
+                  }`}
+                  key={task.id}
+                  onClick={() => navigate("/AllTasks")}
+                >
+                  <div className="timeline-content">
+                    <div className="timeline-date">
+                      {formatDate(task.deadline)}
+                      {isOverDue(task.deadline) && (
+                        <span className="overdue-label">Overdue</span>
+                      )}
+                    </div>
+                    <div className="timeline-title">{task.title}</div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="empty-state">No upcoming tasks</div>
+            )}
+          </div>
         </div>
       </div>
     </div>
