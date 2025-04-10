@@ -170,20 +170,17 @@
   font-size: 0.84rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item .timeline-content .timeline-date .overdue-label {
-  background-color: rgba(255, 103, 103, 0.1);
-  color: var(--lightred);
-  font-size: 0.7rem;
-  padding: 3px 6px;
-  border-radius: 10px;
-  font-weight: 600;
 }
 .Dashboard .DashboardContent .DashboardCard .timeline .timeline-item .timeline-content .timeline-title {
   font-weight: 600;
   color: #333;
   line-height: 1.4;
+}
+.Dashboard .DashboardContent .DashboardCard .timeline .timeline-item .timeline-content .timeline-timeleft {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
 }
 .Dashboard .DashboardContent .DashboardCard .timeline .timeline-item:hover {
   transform: translateY(-2px);
@@ -414,4 +411,9 @@
 
 #GreenIcon {
   border: var(--green) 2px solid;
+}
+
+#overdue {
+  color: var(--lightred);
+  font-weight: 600;
 }/*# sourceMappingURL=Dashboard.css.map */

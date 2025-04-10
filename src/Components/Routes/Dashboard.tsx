@@ -88,6 +88,13 @@ function Dashboard() {
         (task.priority === "Extreme" || isOverDue(task.deadline))
     ).length;
   }, [tasks]);
+const getTimeLeft = (taskdate: string) => {
+  const now = new Date();
+  const date = new Date(taskdate);
+  const diff = date.getTime() - now.getTime();
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  return days > 0 ? `${days} days left` : 'Overdue';
+};
   return (
     <div className="Dashboard">
       <h2 className="Greeting">Welcome back, {user?.firstName} !👋</h2>
@@ -144,11 +151,11 @@ function Dashboard() {
                   <div className="timeline-content">
                     <div className="timeline-date">
                       {formatDate(task.deadline)}
-                      {isOverDue(task.deadline) && (
-                        <span className="overdue-label">Overdue</span>
-                      )}
                     </div>
                     <div className="timeline-title">{task.title}</div>
+                        <div className="timeline-timeleft" id={isOverDue(task.deadline)?"overdue":""}>
+                        <Clock size={12} style={{marginRight: '4px', verticalAlign: 'middle'}} />
+                        {getTimeLeft(task.deadline)}</div>
                   </div>
                 </div>
               ))

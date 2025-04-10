@@ -92,13 +92,9 @@
           width: 60px;
         }
       }
-      // Existing styles from Dashboard.scss remain unchanged...
-
-      // Add the timeline styles
       .timeline {
         position: relative;
         padding: 2rem 0rem;
-
         &::before {
           content: "";
           position: absolute;
@@ -109,7 +105,6 @@
           background-color: #e0e0e0;
           border-radius: 2px;
         }
-
         .timeline-item {
           position: relative;
           margin-bottom: 1.5rem;
@@ -176,15 +171,6 @@
               font-size: 0.84rem;
               display: flex;
               align-items: center;
-              gap: 0.5rem;
-              .overdue-label {
-                background-color: rgba(255, 103, 103, 0.1);
-                color: var(--lightred);
-                font-size: 0.7rem;
-                padding: 3px 6px;
-                border-radius: 10px;
-                font-weight: 600;
-              }
             }
 
             .timeline-title {
@@ -192,8 +178,13 @@
               color: #333;
               line-height: 1.4;
             }
+            .timeline-timeleft {
+              margin-top: 0.5rem;
+              font-size: 0.8rem;
+              color: #666;
+              font-weight: 500;
+            }
           }
-
           &:hover {
             transform: translateY(-2px);
 
@@ -426,4 +417,8 @@
 }
 #GreenIcon {
   border: var(--green) 2px solid;
+}
+#overdue {
+  color: var(--lightred);
+  font-weight: 600;
 }
