@@ -70,7 +70,7 @@ npm install
 
 # Start the development server
 npm start
-
+```
 ## Usage Guide
 ** Getting Started **
 Register a new account or login with existing credentials
