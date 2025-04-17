@@ -72,25 +72,31 @@ npm install
 npm start
 ```
 ## Usage Guide
-** Getting Started **
-Register a new account or login with existing credentials
-The dashboard will show your task overview and upcoming deadlines
-Use the navigation menu to access different sections of the application
-Managing Tasks
-View Tasks: Navigate to the "All Tasks" section
-Create Task: Click the "Add Task" button and fill the form
-Edit Task: Click the edit icon on any task to modify its details
-Delete Task: Use the trash icon to remove a task
-Change Status: Update progress through the status dropdown
-Tracking Progress
-The dashboard displays your overall task completion rate
-Use the priority distribution chart to balance your workload
-Monitor upcoming deadlines through the timeline view
-Account Settings
-Access your profile settings through the settings icon
-Update your personal information in the Personal Information section
-Change your password in the Security section
+- **Getting Started**
+- Register a new account or login with existing credentials
+- The dashboard will show your task overview and upcoming deadlines
+- Use the navigation menu to access different sections of the application
 
+- **Managing Tasks**
+- View Tasks: Navigate to the "All Tasks" section
+- Create Task: Click the "Add Task" button and fill the form
+- Edit Task: Click the edit icon on any task to modify its details
+- Delete Task: Use the trash icon to remove a task
+- Change Status: Update progress through the status dropdown
+
+- **Tracking Progress**
+- The dashboard displays your overall task completion rate
+- Use the priority distribution chart to balance your workload
+- Monitor upcoming deadlines through the timeline view
+  
+- **Account Settings**
+- Access your profile settings through the settings icon
+- Update your personal information in the Personal Information section
+- Change your password in the Security section
+
+## Project Structure
+
+```
 frontend/
 ├── public/              # Static files
 ├── src/
@@ -103,4 +109,5 @@ frontend/
 │   ├── Services/        # API and utility services
 │   └── Assets/          # Images, icons and other static assets
 └── package.json         # Project dependencies and scripts
+```
 
